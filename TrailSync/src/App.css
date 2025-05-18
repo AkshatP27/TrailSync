@@ -34,10 +34,10 @@
   }
 }
 
-/* Override card styling from the default Vite template */
-.card {
-  padding: unset; /* Remove the padding set in App.css */
-}
+/* Remove this override that was causing the padding issues */
+/* .card {
+  padding: unset;
+} */
 
 .read-the-docs {
   color: #888;

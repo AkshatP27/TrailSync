@@ -119,11 +119,55 @@ button:focus-visible {
     @apply btn bg-forest text-white hover:bg-forest/90;
   }
   
+  /* Ensure consistent card padding */
   .card {
-    @apply rounded-lg bg-white p-5 shadow-md transition-all duration-300;
+    @apply rounded-lg bg-white dark:bg-gray-800 p-6 shadow-md transition-all duration-300;
   }
   
   .card-hover {
     @apply hover:shadow-lg hover:-translate-y-1;
+  }
+}
+
+/* Make sure card styling is applied in dark mode too */
+.dark .card {
+  @apply bg-gray-800 text-white;
+}
+
+/* Update the mobile sidebar styles section */
+
+/* Mobile sidebar styles */
+body.sidebar-open {
+  overflow: hidden;
+  position: fixed;
+  width: 100%;
+  height: 100%;
+}
+
+@media (max-width: 767px) {
+  .sidebar-overlay {
+    @apply fixed inset-0 bg-black/50 z-40;
+  }
+
+  .sidebar {
+    @apply fixed top-0 right-0 bottom-0 w-64 bg-white dark:bg-gray-800 shadow-xl z-50;
+  }
+
+  .mobile-menu {
+    height: 100vh;
+    max-height: 100vh;
+    position: fixed;
+  }
+}
+
+/* Mobile animation tweaks */
+.mobile-menu-transition {
+  transition: transform 0.3s ease;
+}
+
+/* Fix footer on small screens */
+@media (max-width: 640px) {
+  footer .container {
+    text-align: center;
   }
 }

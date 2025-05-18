@@ -1,10 +1,10 @@
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { motion } from 'framer-motion';
 import LeavesAnimation from '../components/animations/LeavesAnimation';
-import { useThemeContext } from '../context/ThemeContext';
+import { useLanguageContext } from '../context/LanguageContext';
 
 function Profile() {
-  const { theme, toggleTheme } = useThemeContext();
+  const { language, changeLanguage } = useLanguageContext();
   const [user, setUser] = useState({
     name: 'Nature Explorer',
     email: 'explorer@trailsync.com',
@@ -12,12 +12,22 @@ function Profile() {
     avatar: 'https://images.unsplash.com/photo-1517849845537-4d257902454a?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=735&q=80',
     preferences: {
       notifications: true,
-      theme: theme,
-      language: 'English',
+      language: language, // Use language from context
     },
     bio: 'Passionate about discovering hidden trails and experiencing the beauty of nature.',
     favoriteActivities: ['Hiking', 'Photography', 'Camping'],
   });
+  
+  // Update user state when language context changes
+  useEffect(() => {
+    setUser(prev => ({
+      ...prev,
+      preferences: {
+        ...prev.preferences,
+        language: language
+      }
+    }));
+  }, [language]);
 
   const handleNotificationsChange = () => {
     setUser(prev => ({
@@ -29,25 +39,9 @@ function Profile() {
     }));
   };
 
-  const handleThemeChange = (newTheme) => {
-    setUser(prev => ({
-      ...prev,
-      preferences: {
-        ...prev.preferences,
-        theme: newTheme
-      }
-    }));
-    toggleTheme();
-  };
-
   const handleLanguageChange = (e) => {
-    setUser(prev => ({
-      ...prev,
-      preferences: {
-        ...prev.preferences,
-        language: e.target.value
-      }
-    }));
+    const newLanguage = e.target.value;
+    changeLanguage(newLanguage);
   };
 
   return (
@@ -144,44 +138,24 @@ function Profile() {
                   <p className="text-sm text-sandy">Choose your preferred language</p>
                 </div>
                 <select 
-                  className="p-2 text-forest border border-gray-300 rounded-md bg-white"
+                  className="p-2 text-forest dark:text-white border border-gray-300 dark:border-gray-600 rounded-md bg-white dark:bg-gray-700"
                   value={user.preferences.language}
                   onChange={handleLanguageChange}
                 >
                   <option value="English">English</option>
-                  <option value="Spanish">Spanish</option>
-                  <option value="French">French</option>
+                  <option value="Spanish">Español</option>
+                  <option value="French">Français</option>
                 </select>
-              </div>
-              
-              <div className="flex items-center justify-between">
-                <div>
-                  <h3 className="text-forest font-medium">Theme</h3>
-                  <p className="text-sm text-sandy">Choose light or dark display mode</p>
-                </div>
-                <div className="flex space-x-2">
-                  <button 
-                    onClick={() => handleThemeChange('light')}
-                    className={`w-8 h-8 rounded-full flex items-center justify-center ${theme === 'light' ? 'bg-forest text-white' : 'bg-gray-200 text-forest'}`}
-                  >
-                    <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={1.5} stroke="currentColor" className="w-5 h-5">
-                      <path strokeLinecap="round" strokeLinejoin="round" d="M12 3v2.25m6.364.386l-1.591 1.591M21 12h-2.25m-.386 6.364l-1.591-1.591M12 18.75V21m-4.773-4.227l-1.591 1.591M5.25 12H3m4.227-4.773L5.636 5.636M15.75 12a3.75 3.75 0 11-7.5 0 3.75 3.75 0 017.5 0z" />
-                    </svg>
-                  </button>
-                  <button 
-                    onClick={() => handleThemeChange('dark')}
-                    className={`w-8 h-8 rounded-full flex items-center justify-center ${theme === 'dark' ? 'bg-forest text-white' : 'bg-gray-200 text-forest'}`}
-                  >
-                    <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={1.5} stroke="currentColor" className="w-4 h-4">
-                      <path strokeLinecap="round" strokeLinejoin="round" d="M21.752 15.002A9.718 9.718 0 0118 15.75c-5.385 0-9.75-4.365-9.75-9.75 0-1.33.266-2.597.748-3.752A9.753 9.753 0 003 11.25C3 16.635 7.365 21 12.75 21a9.753 9.753 0 009.002-5.998z" />
-                    </svg>
-                  </button>
-                </div>
               </div>
             </div>
             
             <div className="mt-6 pt-6 border-t border-forest/10">
-              <button className="btn-primary">Save Changes</button>
+              <button 
+                className="btn-primary"
+                onClick={() => alert('Settings saved successfully!')}
+              >
+                Save Changes
+              </button>
             </div>
           </div>
         </motion.div>
