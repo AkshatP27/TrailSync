@@ -123,9 +123,10 @@ function Header() {
             )}
           </motion.button>
           
-          <button 
+          <motion.button 
             onClick={(e) => toggleMobileMenu(e)} 
             className="p-2 text-forest dark:text-green-400 menu-button"
+            whileTap={{ scale: 0.9 }}
             aria-label="Menu"
           >
             {isMobileMenuOpen ? (
@@ -137,7 +138,7 @@ function Header() {
                 <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M4 6h16M4 12h16M4 18h16" />
               </svg>
             )}
-          </button>
+          </motion.button>
         </div>
       </div>
     </header>

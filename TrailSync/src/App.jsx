@@ -1,37 +1,41 @@
 import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
-import { TripProvider } from './context/TripContext';
 import { ThemeProvider } from './context/ThemeContext';
-import { LanguageProvider } from './context/LanguageContext';
 import { NavigationProvider } from './context/NavigationContext';
+import { TripProvider } from './context/TripContext';
+import { LanguageProvider } from './context/LanguageContext';
 import Layout from './components/layout/Layout';
 import Home from './pages/Home';
 import Dashboard from './pages/Dashboard';
-import TripDetails from './pages/TripDetails';
 import NewTrip from './pages/NewTrip';
+import EditTrip from './pages/EditTrip';
+import TripDetails from './pages/TripDetails';
 import Profile from './pages/Profile';
+import NotFound from './pages/NotFound';
 import './App.css';
 
 function App() {
   return (
-    <Router>
-      <ThemeProvider>
-        <LanguageProvider>
-          <NavigationProvider>
-            <TripProvider>
+    <ThemeProvider>
+      <NavigationProvider>
+        <TripProvider>
+          <LanguageProvider>
+            <Router>
               <Layout>
                 <Routes>
                   <Route path="/" element={<Home />} />
                   <Route path="/dashboard" element={<Dashboard />} />
-                  <Route path="/trips/:id" element={<TripDetails />} />
                   <Route path="/trips/new" element={<NewTrip />} />
+                  <Route path="/trips/edit/:id" element={<EditTrip />} />
+                  <Route path="/trips/:id" element={<TripDetails />} />
                   <Route path="/profile" element={<Profile />} />
+                  <Route path="*" element={<NotFound />} />
                 </Routes>
               </Layout>
-            </TripProvider>
-          </NavigationProvider>
-        </LanguageProvider>
-      </ThemeProvider>
-    </Router>
+            </Router>
+          </LanguageProvider>
+        </TripProvider>
+      </NavigationProvider>
+    </ThemeProvider>
   );
 }
 

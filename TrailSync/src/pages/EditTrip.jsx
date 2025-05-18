@@ -1,18 +1,14 @@
-import { useState } from 'react';
-import { useNavigate } from 'react-router-dom';
+import { useState, useEffect } from 'react';
+import { useParams, useNavigate } from 'react-router-dom';
 import { motion } from 'framer-motion';
 import { useTripContext } from '../context/TripContext';
 
-// Available category options
-const CATEGORIES = [
-  'Mountain', 'Beach', 'Forest', 'Desert', 'City', 'Island', 
-  'Lake', 'River', 'Countryside', 'National Park', 'Water', 
-  'Winter', 'Summer', 'Camping', 'Hiking', 'Relaxation', 'Adventure', 'Nature'
-];
+const CATEGORIES = ['Adventure', 'Relaxation', 'Cultural', 'Nature', 'Family'];
 
-function NewTrip() {
+function EditTrip() {
+  const { id } = useParams();
   const navigate = useNavigate();
-  const { addTrip } = useTripContext();
+  const { getTrip, updateTrip } = useTripContext();
   const [formData, setFormData] = useState({
     title: '',
     destination: '',
@@ -21,8 +17,25 @@ function NewTrip() {
     description: '',
     activities: ['', '', ''],
     categories: [],
-    image: 'https://images.unsplash.com/photo-1501785888041-af3ef285b470?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=1470&q=80'
+    image: ''
   });
+  
+  useEffect(() => {
+    const trip = getTrip(id);
+    if (!trip) {
+      navigate('/dashboard');
+      return;
+    }
+    
+    // Ensure activities array has exactly 3 items for the form
+    const activities = [...trip.activities];
+    while (activities.length < 3) activities.push('');
+    
+    setFormData({
+      ...trip,
+      activities
+    });
+  }, [id, getTrip, navigate]);
   
   const handleChange = (e) => {
     const { name, value } = e.target;
@@ -40,18 +53,15 @@ function NewTrip() {
       activities: newActivities
     }));
   };
-  
-  // Handle category toggle
+
   const handleCategoryToggle = (category) => {
     setFormData(prev => {
       if (prev.categories.includes(category)) {
-        // Remove category if already selected
         return {
           ...prev,
           categories: prev.categories.filter(c => c !== category)
         };
       } else {
-        // Add category if not already selected (limit to 5)
         if (prev.categories.length >= 5) return prev;
         return {
           ...prev,
@@ -60,20 +70,20 @@ function NewTrip() {
       }
     });
   };
-
+  
   const handleSubmit = (e) => {
     e.preventDefault();
     
     // Filter out empty activities
     const filteredActivities = formData.activities.filter(activity => activity.trim() !== '');
     
-    const newTrip = {
+    const updatedTrip = {
       ...formData,
       activities: filteredActivities.length > 0 ? filteredActivities : ['Exploring']
     };
     
-    const addedTrip = addTrip(newTrip);
-    navigate(`/trips/${addedTrip.id}`);
+    updateTrip(id, updatedTrip);
+    navigate(`/trips/${id}`);
   };
   
   return (
@@ -84,18 +94,18 @@ function NewTrip() {
         animate={{ opacity: 1, y: 0 }}
         transition={{ duration: 0.5 }}
       >
-        Plan Your New Adventure
+        Edit Your Adventure
       </motion.h1>
       
       <motion.form 
-        className="bg-white rounded-lg shadow-md p-6"
+        className="bg-white dark:bg-gray-800 rounded-lg shadow-md p-6"
         initial={{ opacity: 0, y: 20 }}
         animate={{ opacity: 1, y: 0 }}
         transition={{ duration: 0.5, delay: 0.2 }}
         onSubmit={handleSubmit}
       >
         <div className="mb-6">
-          <label htmlFor="title" className="block text-forest font-medium mb-2">
+          <label htmlFor="title" className="block text-forest dark:text-green-400 font-medium mb-2">
             Trip Title
           </label>
           <input
@@ -111,7 +121,7 @@ function NewTrip() {
         </div>
         
         <div className="mb-6">
-          <label htmlFor="destination" className="block text-forest font-medium mb-2">
+          <label htmlFor="destination" className="block text-forest dark:text-green-400 font-medium mb-2">
             Destination
           </label>
           <input
@@ -128,7 +138,7 @@ function NewTrip() {
         
         <div className="grid grid-cols-1 md:grid-cols-2 gap-4 mb-6">
           <div>
-            <label htmlFor="startDate" className="block text-forest font-medium mb-2">
+            <label htmlFor="startDate" className="block text-forest dark:text-green-400 font-medium mb-2">
               Start Date
             </label>
             <input
@@ -143,7 +153,7 @@ function NewTrip() {
           </div>
           
           <div>
-            <label htmlFor="endDate" className="block text-forest font-medium mb-2">
+            <label htmlFor="endDate" className="block text-forest dark:text-green-400 font-medium mb-2">
               End Date
             </label>
             <input
@@ -160,7 +170,7 @@ function NewTrip() {
         </div>
         
         <div className="mb-6">
-          <label htmlFor="description" className="block text-forest font-medium mb-2">
+          <label htmlFor="description" className="block text-forest dark:text-green-400 font-medium mb-2">
             Description
           </label>
           <textarea
@@ -175,7 +185,7 @@ function NewTrip() {
         </div>
         
         <div className="mb-6">
-          <label className="block text-forest font-medium mb-2">
+          <label className="block text-forest dark:text-green-400 font-medium mb-2">
             Activities (up to 3)
           </label>
           <div className="space-y-2">
@@ -191,31 +201,45 @@ function NewTrip() {
             ))}
           </div>
         </div>
-        
-        {/* Add this new section after activities */}
+
         <div className="mb-6">
-          <label className="block text-forest font-medium mb-2">
-            Categories (select up to 5)
+          <label className="block text-forest dark:text-green-400 font-medium mb-2">
+            Categories (up to 5)
           </label>
           <div className="flex flex-wrap gap-2">
             {CATEGORIES.map(category => (
               <button
-                key={category}
                 type="button"
+                key={category}
                 onClick={() => handleCategoryToggle(category)}
-                className={`px-3 py-1 text-sm rounded-full transition-colors ${
-                  formData.categories.includes(category)
-                    ? 'bg-forest text-white'
-                    : 'bg-gray-100 text-gray-700 hover:bg-gray-200'
-                }`}
+                className={`px-3 py-1 rounded-full border ${formData.categories.includes(category) ? 'bg-forest text-white' : 'bg-white text-forest border-forest'} dark:${formData.categories.includes(category) ? 'bg-green-400 text-gray-800' : 'bg-gray-800 text-green-400 border-green-400'}`}
               >
                 {category}
               </button>
             ))}
           </div>
-          {formData.categories.length > 0 && (
-            <div className="mt-2 text-sm text-gray-500">
-              Selected: {formData.categories.join(', ')}
+        </div>
+        
+        <div className="mb-6">
+          <label htmlFor="image" className="block text-forest dark:text-green-400 font-medium mb-2">
+            Image URL (optional)
+          </label>
+          <input
+            type="text"
+            id="image"
+            name="image"
+            value={formData.image}
+            onChange={handleChange}
+            className="form-control"
+            placeholder="https://example.com/image.jpg"
+          />
+          {formData.image && (
+            <div className="mt-2 rounded-md overflow-hidden h-48">
+              <img 
+                src={formData.image} 
+                alt="Trip preview" 
+                className="w-full h-full object-cover"
+              />
             </div>
           )}
         </div>
@@ -223,8 +247,8 @@ function NewTrip() {
         <div className="flex items-center justify-end mt-8 space-x-4">
           <button 
             type="button" 
-            onClick={() => navigate('/dashboard')}
-            className="px-4 py-2 text-forest border border-forest rounded-md hover:bg-forest/5"
+            onClick={() => navigate(`/trips/${id}`)}
+            className="px-4 py-2 text-forest border border-forest rounded-md hover:bg-forest/5 dark:text-green-400 dark:border-green-400 dark:hover:bg-green-400/5"
           >
             Cancel
           </button>
@@ -232,7 +256,7 @@ function NewTrip() {
             type="submit"
             className="btn-primary"
           >
-            Create Trip
+            Save Changes
           </button>
         </div>
       </motion.form>
@@ -240,4 +264,4 @@ function NewTrip() {
   );
 }
 
-export default NewTrip;
+export default EditTrip;

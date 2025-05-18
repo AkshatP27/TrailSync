@@ -4,7 +4,7 @@ import { useTripContext } from '../context/TripContext';
 import TripCard from '../components/trips/TripCard';
 
 function Dashboard() {
-  const { trips } = useTripContext();
+  const { trips, filter, setFilter, searchTerm, setSearchTerm, filteredTrips, categoryOptions } = useTripContext();
   
   return (
     <div className="py-8">
@@ -20,6 +20,44 @@ function Dashboard() {
         </p>
       </motion.div>
       
+      <div className="flex flex-col md:flex-row justify-between items-center mb-6 gap-3">
+        <div className="flex items-center gap-2">
+          <select 
+            className="form-control w-auto" 
+            value={filter} 
+            onChange={e => setFilter(e.target.value)}
+          >
+            <option value="all">All Trips</option>
+            <optgroup label="Categories">
+              {categoryOptions.map(category => (
+                <option key={category} value={category}>{category}</option>
+              ))}
+            </optgroup>
+            <optgroup label="Activities">
+              <option value="hiking">Hiking</option>
+              <option value="camping">Camping</option>
+              <option value="beach">Beach</option>
+              <option value="swimming">Swimming</option>
+              <option value="meditation">Relaxation</option>
+              <option value="photo">Photography</option>
+            </optgroup>
+          </select>
+        </div>
+        
+        <div className="relative">
+          <input
+            type="text"
+            placeholder="Search trips..."
+            className="form-control pl-10"
+            value={searchTerm}
+            onChange={e => setSearchTerm(e.target.value)}
+          />
+          <svg className="w-5 h-5 absolute left-3 top-2.5 text-gray-400" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z" />
+          </svg>
+        </div>
+      </div>
+      
       <div className="flex justify-end mb-6">
         <Link 
           to="/trips/new"
@@ -32,7 +70,7 @@ function Dashboard() {
         </Link>
       </div>
       
-      {trips.length === 0 ? (
+      {filteredTrips.length === 0 ? (
         <div className="text-center py-20">
           <svg className="w-16 h-16 mx-auto text-forest/30 mb-4" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor">
             <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M3.055 11H5a2 2 0 012 2v1a2 2 0 002 2 2 2 0 012 2v2.945M8 3.935V5.5A2.5 2.5 0 0010.5 8h.5a2 2 0 012 2 2 2 0 104 0 2 2 0 012-2h1.064M15 20.488V18a2 2 0 012-2h3.064M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
@@ -48,7 +86,7 @@ function Dashboard() {
           animate={{ opacity: 1 }}
           transition={{ duration: 0.5, delay: 0.2 }}
         >
-          {trips.map((trip, index) => (
+          {filteredTrips.map((trip, index) => (
             <motion.div
               key={trip.id}
               initial={{ opacity: 0, y: 20 }}
