@@ -1,6 +1,5 @@
 import { useState, useEffect } from 'react';
 import { motion } from 'framer-motion';
-import LeavesAnimation from '../components/animations/LeavesAnimation';
 import { useLanguageContext } from '../context/LanguageContext';
 
 function Profile() {
@@ -46,9 +45,7 @@ function Profile() {
 
   return (
     <div className="relative py-8 max-w-4xl mx-auto px-4">
-      <div className="absolute right-0 top-0 opacity-30 pointer-events-none">
-        <LeavesAnimation />
-      </div>
+      {/* Removed LeavesAnimation from here */}
       
       <motion.div
         className="mb-10 text-center"

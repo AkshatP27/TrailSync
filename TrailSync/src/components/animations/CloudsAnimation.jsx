@@ -27,7 +27,7 @@ const CloudsAnimation = () => {
         this.height = this.width * 0.6;
         this.speed = 0.2 + Math.random() * 0.3;
         this.opacity = 0.4 + Math.random() * 0.3;
-        // Use different colors based on theme
+        // In CloudsAnimation.jsx - theme-aware colors
         this.color = theme === 'dark' ? '255, 255, 255' : '200, 215, 220';
       }
       

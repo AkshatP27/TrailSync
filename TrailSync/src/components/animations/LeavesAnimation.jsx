@@ -1,9 +1,11 @@
 import { useRef, useEffect } from 'react';
 import { useThemeContext } from '../../context/ThemeContext';
+import { useLocation } from 'react-router-dom';
 
 const LeavesAnimation = () => {
   const canvasRef = useRef(null);
   const { theme } = useThemeContext();
+  const location = useLocation();
   
   useEffect(() => {
     const canvas = canvasRef.current;
@@ -17,6 +19,16 @@ const LeavesAnimation = () => {
     
     resizeCanvas();
     window.addEventListener('resize', resizeCanvas);
+    
+    // Adjust leaves count based on page
+    let leavesCount = 20; // Default count
+    
+    // Reduce leaves on form pages and dashboard for less distraction
+    if (location.pathname.includes('/trips/new') || location.pathname.includes('/profile')) {
+      leavesCount = 8;
+    } else if (location.pathname.includes('/dashboard')) {
+      leavesCount = 12;
+    }
     
     // Leaf class
     class Leaf {
@@ -80,8 +92,8 @@ const LeavesAnimation = () => {
       }
     }
     
-    // Create leaves - more leaves for better visibility
-    const leaves = Array.from({ length: 20 }, () => new Leaf());
+    // Create leaves with adjusted count
+    const leaves = Array.from({ length: leavesCount }, () => new Leaf());
     
     // Animation loop
     const animate = () => {
@@ -95,7 +107,7 @@ const LeavesAnimation = () => {
     return () => {
       window.removeEventListener('resize', resizeCanvas);
     };
-  }, [theme]);
+  }, [theme, location.pathname]);
   
   return (
     <canvas 

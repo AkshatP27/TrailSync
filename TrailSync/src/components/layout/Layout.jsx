@@ -5,6 +5,8 @@ import { Link } from 'react-router-dom';
 import Header from './Header';
 import Footer from './Footer';
 import CloudsAnimation from '../animations/CloudsAnimation';
+import LeavesAnimation from '../animations/LeavesAnimation';
+import ButterflyAnimation from '../animations/ButterflyAnimation';
 import { useThemeContext } from '../../context/ThemeContext';
 import { useNavigationContext } from '../../context/NavigationContext';
 
@@ -15,27 +17,29 @@ function Layout({ children }) {
   const isHomePage = location.pathname === '/';
   
   useEffect(() => {
-  const handleClickOutside = (event) => {
-    const isMenuButton = event.target.closest('.menu-button');
-    const isMobileMenu = event.target.closest('.mobile-menu');
+    const handleClickOutside = (event) => {
+      const isMenuButton = event.target.closest('.menu-button');
+      const isMobileMenu = event.target.closest('.mobile-menu');
+      
+      // Only close if clicking outside both the menu and the button
+      if (isMobileMenuOpen && !isMobileMenu && !isMenuButton) {
+        closeMobileMenu();
+      }
+    };
     
-    // Only close if clicking outside both the menu and the button
-    if (isMobileMenuOpen && !isMobileMenu && !isMenuButton) {
-      closeMobileMenu();
-    }
-  };
-  
-  document.addEventListener('mousedown', handleClickOutside);
-  return () => {
-    document.removeEventListener('mousedown', handleClickOutside);
-  };
-}, [isMobileMenuOpen, closeMobileMenu]);
+    document.addEventListener('mousedown', handleClickOutside);
+    return () => {
+      document.removeEventListener('mousedown', handleClickOutside);
+    };
+  }, [isMobileMenuOpen, closeMobileMenu]);
   
   return (
     <div className={`min-h-screen flex flex-col ${theme}`}>
       {/* Nature animations overlay */}
       <div className="fixed inset-0 pointer-events-none z-0">
         <CloudsAnimation />
+        <LeavesAnimation />
+        <ButterflyAnimation />
       </div>
       
       <Header />

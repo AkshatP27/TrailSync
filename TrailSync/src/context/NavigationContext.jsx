@@ -20,6 +20,7 @@ export const NavigationProvider = ({ children }) => {
     };
   }, [isMobileMenuOpen]);
   
+  // In NavigationContext.jsx - we've fixed event propagation
   const toggleMobileMenu = (e) => {
     // Stop event propagation to prevent conflicts
     if (e) e.stopPropagation();

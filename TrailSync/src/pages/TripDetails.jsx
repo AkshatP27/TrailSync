@@ -11,6 +11,10 @@ function TripDetails() {
   const [trip, setTrip] = useState(null);
   const [isLoading, setIsLoading] = useState(true);
   const [showDeleteModal, setShowDeleteModal] = useState(false);
+  const [weather, setWeather] = useState({
+    loading: true,
+    forecast: []
+  });
   
   useEffect(() => {
     const tripData = getTrip(id);
@@ -22,6 +26,10 @@ function TripDetails() {
     }
     setIsLoading(false);
   }, [id, getTrip, navigate]);
+
+  useEffect(() => {
+    // Weather fetching logic that generates forecast data...
+  }, [trip]);
   
   const handleDelete = () => {
     deleteTrip(id);
