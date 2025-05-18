@@ -1,6 +1,6 @@
 import { useEffect, useState } from 'react';
 import { useParams, useNavigate, Link } from 'react-router-dom';
-import { format } from 'date-fns';
+import dayjs from 'dayjs';
 import { motion } from 'framer-motion';
 import { useTripContext } from '../context/TripContext';
 
@@ -221,10 +221,10 @@ function TripDetails() {
               <div>
                 <h3 className="text-sm text-sandy">Dates</h3>
                 <p className="font-medium">
-                  {format(new Date(trip.startDate), 'MMM d')} - {format(new Date(trip.endDate), 'MMM d, yyyy')}
+                  {dayjs(trip.startDate).format('MMM D')} - {dayjs(trip.endDate).format('MMM D, YYYY')}
                 </p>
                 <p className="text-sm text-gray-500">
-                  {Math.ceil((new Date(trip.endDate) - new Date(trip.startDate)) / (1000 * 60 * 60 * 24))} days
+                  {dayjs(trip.endDate).diff(dayjs(trip.startDate), 'day')} days
                 </p>
               </div>
             </div>

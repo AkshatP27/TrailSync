@@ -13,7 +13,7 @@
     "@babel/runtime": "^7.27.1",
     "@heroicons/react": "^2.2.0",
     "autoprefixer": "^10.4.21",
-    "date-fns": "^2.30.0",
+    "dayjs": "^1.11.13",
     "framer-motion": "^11.18.2",
     "lottie-react": "^2.4.1",
     "postcss": "^8.5.3",

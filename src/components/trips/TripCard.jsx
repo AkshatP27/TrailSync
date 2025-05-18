@@ -1,6 +1,6 @@
 import { useState } from 'react';
 import { Link } from 'react-router-dom';
-import { format } from 'date-fns';
+import dayjs from 'dayjs';
 import { motion } from 'framer-motion';
 
 function TripCard({ trip }) {
@@ -55,7 +55,7 @@ function TripCard({ trip }) {
         
         <div className="flex justify-between items-center mb-4">
           <div className="text-sm text-gray-600 dark:text-gray-300">
-            {format(new Date(trip.startDate), 'MMM d')} - {format(new Date(trip.endDate), 'MMM d, yyyy')}
+            {dayjs(trip.startDate).format('MMM D')} - {dayjs(trip.endDate).format('MMM D, YYYY')}
           </div>
         </div>
         
