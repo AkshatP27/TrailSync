@@ -127,6 +127,15 @@ button:focus-visible {
   .card-hover {
     @apply hover:shadow-lg hover:-translate-y-1;
   }
+  
+  /* Form control styling */
+  .form-control {
+    @apply w-full px-4 py-2 rounded-md border border-gray-300 focus:outline-none focus:ring-2 focus:ring-forest/50 transition-colors;
+  }
+  
+  .dark .form-control {
+    @apply border-gray-600 bg-gray-700 text-white focus:ring-green-400/50;
+  }
 }
 
 /* Make sure card styling is applied in dark mode too */
@@ -170,4 +179,35 @@ body.sidebar-open {
   footer .container {
     text-align: center;
   }
+}
+
+/* Form element styling for dark mode */
+.dark input, 
+.dark textarea, 
+.dark select {
+  @apply bg-gray-700 border-gray-600 text-white placeholder-gray-400;
+}
+
+.dark input::placeholder, 
+.dark textarea::placeholder {
+  @apply text-gray-400;
+}
+
+/* Specific fixes for form controls */
+.dark input[type="text"],
+.dark input[type="date"],
+.dark input[type="email"],
+.dark input[type="password"],
+.dark textarea {
+  color-scheme: dark;
+}
+
+/* Date input specific fixes */
+.dark input[type="date"]::-webkit-calendar-picker-indicator {
+  filter: invert(1);
+}
+
+/* Select dropdowns */
+.dark select option {
+  @apply bg-gray-700;
 }

@@ -1,7 +1,9 @@
 import { useRef, useEffect } from 'react';
+import { useThemeContext } from '../../context/ThemeContext';
 
 const LeavesAnimation = () => {
   const canvasRef = useRef(null);
+  const { theme } = useThemeContext();
   
   useEffect(() => {
     const canvas = canvasRef.current;
@@ -26,8 +28,15 @@ const LeavesAnimation = () => {
         this.speedY = 1 + Math.random() * 1;
         this.rotation = Math.random() * Math.PI * 2;
         this.rotationSpeed = Math.random() * 0.03 - 0.015;
-        this.color = Math.random() > 0.5 ? '#2e8b57' : '#deb887';
-        this.opacity = 0.3 + Math.random() * 0.3;
+        
+        // Use different colors based on theme
+        if (theme === 'dark') {
+          this.color = Math.random() > 0.5 ? '#3da668' : '#e9c899'; // Brighter for dark mode
+        } else {
+          this.color = Math.random() > 0.5 ? '#1a6840' : '#c89a60'; // Darker for light mode
+        }
+        
+        this.opacity = theme === 'dark' ? 0.4 + Math.random() * 0.4 : 0.5 + Math.random() * 0.4;
         this.lifespan = 200 + Math.random() * 100;
         this.age = 0;
       }
@@ -71,8 +80,8 @@ const LeavesAnimation = () => {
       }
     }
     
-    // Create leaves
-    const leaves = Array.from({ length: 15 }, () => new Leaf());
+    // Create leaves - more leaves for better visibility
+    const leaves = Array.from({ length: 20 }, () => new Leaf());
     
     // Animation loop
     const animate = () => {
@@ -86,7 +95,7 @@ const LeavesAnimation = () => {
     return () => {
       window.removeEventListener('resize', resizeCanvas);
     };
-  }, []);
+  }, [theme]);
   
   return (
     <canvas 

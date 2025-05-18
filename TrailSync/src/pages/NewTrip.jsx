@@ -77,7 +77,7 @@ function NewTrip() {
             required
             value={formData.title}
             onChange={handleChange}
-            className="w-full px-4 py-2 rounded-md border border-gray-300 focus:outline-none focus:ring-2 focus:ring-forest/50"
+            className="form-control"
             placeholder="Mountain Retreat, Beach Getaway..."
           />
         </div>
@@ -93,7 +93,7 @@ function NewTrip() {
             required
             value={formData.destination}
             onChange={handleChange}
-            className="w-full px-4 py-2 rounded-md border border-gray-300 focus:outline-none focus:ring-2 focus:ring-forest/50"
+            className="form-control"
             placeholder="Yosemite National Park, Bali..."
           />
         </div>
@@ -110,7 +110,7 @@ function NewTrip() {
               required
               value={formData.startDate}
               onChange={handleChange}
-              className="w-full px-4 py-2 rounded-md border border-gray-300 focus:outline-none focus:ring-2 focus:ring-forest/50"
+              className="form-control"
             />
           </div>
           
@@ -126,7 +126,7 @@ function NewTrip() {
               value={formData.endDate}
               onChange={handleChange}
               min={formData.startDate}
-              className="w-full px-4 py-2 rounded-md border border-gray-300 focus:outline-none focus:ring-2 focus:ring-forest/50"
+              className="form-control"
             />
           </div>
         </div>
@@ -141,7 +141,7 @@ function NewTrip() {
             value={formData.description}
             onChange={handleChange}
             rows="4"
-            className="w-full px-4 py-2 rounded-md border border-gray-300 focus:outline-none focus:ring-2 focus:ring-forest/50"
+            className="form-control"
             placeholder="Describe your adventure..."
           ></textarea>
         </div>
@@ -157,7 +157,7 @@ function NewTrip() {
                 type="text"
                 value={activity}
                 onChange={(e) => handleActivityChange(index, e.target.value)}
-                className="w-full px-4 py-2 rounded-md border border-gray-300 focus:outline-none focus:ring-2 focus:ring-forest/50"
+                className="form-control"
                 placeholder={`Activity ${index + 1} (e.g., Hiking, Swimming)`}
               />
             ))}

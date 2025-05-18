@@ -1,7 +1,9 @@
 import { useRef, useEffect } from 'react';
+import { useThemeContext } from '../../context/ThemeContext';
 
 const CloudsAnimation = () => {
   const canvasRef = useRef(null);
+  const { theme } = useThemeContext();
   
   useEffect(() => {
     const canvas = canvasRef.current;
@@ -24,11 +26,13 @@ const CloudsAnimation = () => {
         this.width = 60 + Math.random() * 100;
         this.height = this.width * 0.6;
         this.speed = 0.2 + Math.random() * 0.3;
-        this.opacity = 0.5 + Math.random() * 0.3;
+        this.opacity = 0.4 + Math.random() * 0.3;
+        // Use different colors based on theme
+        this.color = theme === 'dark' ? '255, 255, 255' : '200, 215, 220';
       }
       
       draw() {
-        ctx.fillStyle = `rgba(255, 255, 255, ${this.opacity})`;
+        ctx.fillStyle = `rgba(${this.color}, ${this.opacity})`;
         ctx.beginPath();
         ctx.arc(this.x, this.y, this.width * 0.3, 0, Math.PI * 2);
         ctx.arc(this.x + this.width * 0.2, this.y - this.height * 0.2, this.width * 0.25, 0, Math.PI * 2);
@@ -62,13 +66,13 @@ const CloudsAnimation = () => {
     return () => {
       window.removeEventListener('resize', resizeCanvas);
     };
-  }, []);
+  }, [theme]);
   
   return (
     <canvas 
       ref={canvasRef} 
       className="absolute inset-0 z-0 pointer-events-none"
-      style={{ opacity: 0.7 }}
+      style={{ opacity: 0.8 }}
     />
   );
 };
