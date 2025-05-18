@@ -59,10 +59,15 @@ function TripCard({ trip }) {
           </div>
         </div>
         
-        {/* Days remaining */}
+        {/* Days remaining badge */}
         {new Date(trip.startDate) > new Date() && (
-          <div className="text-sm text-sky-blue mb-3 font-medium">
-            {Math.ceil((new Date(trip.startDate) - new Date()) / (1000 * 60 * 60 * 24))} days until trip
+          <div className="absolute top-0 right-0 mt-2 mr-2 bg-forest text-white px-3 py-1 rounded-full text-xs font-bold shadow-md">
+            <span className="flex items-center">
+              <svg xmlns="http://www.w3.org/2000/svg" className="h-3 w-3 mr-1" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z" />
+              </svg>
+              {dayjs(trip.startDate).diff(dayjs(), 'day')} days
+            </span>
           </div>
         )}
         

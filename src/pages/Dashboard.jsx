@@ -2,12 +2,63 @@ import { motion } from 'framer-motion';
 import { Link } from 'react-router-dom';
 import { useTripContext } from '../context/TripContext';
 import TripCard from '../components/trips/TripCard';
+import dayjs from 'dayjs';
 
 function Dashboard() {
   const { trips, filter, setFilter, searchTerm, setSearchTerm, filteredTrips, categoryOptions } = useTripContext();
   
+  // Find the next upcoming trip
+  const nextTrip = trips.reduce((closest, trip) => {
+    const today = dayjs();
+    const tripStart = dayjs(trip.startDate);
+    
+    // Only consider future trips
+    if (tripStart.isAfter(today)) {
+      // If there's no closest trip yet, or this trip is sooner
+      if (!closest || tripStart.isBefore(dayjs(closest.startDate))) {
+        return trip;
+      }
+    }
+    return closest;
+  }, null);
+  
+  // Calculate days remaining
+  const daysRemaining = nextTrip ? dayjs(nextTrip.startDate).diff(dayjs(), 'day') : null;
+  
   return (
     <div className="py-8">
+      {/* Next Trip Notification */}
+      {nextTrip && daysRemaining > 0 && (
+        <motion.div 
+          className="mb-6 bg-gradient-to-r from-forest/10 to-sky-blue/10 rounded-lg p-4 shadow-md"
+          initial={{ opacity: 0, y: -10 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ duration: 0.5 }}
+        >
+          <div className="flex flex-col md:flex-row items-center justify-between">
+            <div className="flex items-center mb-3 md:mb-0">
+              <div className="mr-4 bg-forest rounded-full p-2">
+                <svg xmlns="http://www.w3.org/2000/svg" className="h-6 w-6 text-white" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z" />
+                </svg>
+              </div>
+              <div>
+                <h3 className="font-medium text-forest">Your next adventure is coming up!</h3>
+                <p className="text-sandy">
+                  <span className="font-bold">{daysRemaining}</span> days until your trip to <span className="font-bold">{nextTrip.destination}</span>
+                </p>
+              </div>
+            </div>
+            <Link 
+              to={`/trips/${nextTrip.id}`} 
+              className="btn-primary text-sm"
+            >
+              View Details
+            </Link>
+          </div>
+        </motion.div>
+      )}
+
       <motion.div
         initial={{ opacity: 0, y: -20 }}
         animate={{ opacity: 1, y: 0 }}

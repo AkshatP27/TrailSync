@@ -220,6 +220,62 @@ function NewTrip() {
           )}
         </div>
         
+        <div className="mb-6">
+          <label htmlFor="image" className="block text-forest font-medium mb-2">
+            Destination Image URL
+          </label>
+          <input
+            type="text"
+            id="image"
+            name="image"
+            value={formData.image}
+            onChange={handleChange}
+            className="form-control"
+            placeholder="https://example.com/your-image.jpg"
+          />
+          
+          {/* Image Preview */}
+          {formData.image && (
+            <div className="mt-3 rounded-lg overflow-hidden border border-forest/20 aspect-video max-h-64">
+              <img 
+                src={formData.image} 
+                alt="Destination preview"
+                onError={(e) => {
+                  e.target.onerror = null;
+                  e.target.src = "https://images.unsplash.com/photo-1501785888041-af3ef285b470?ixlib=rb-4.0.3";
+                  e.target.alt = "Default landscape";
+                }}
+                className="w-full h-full object-cover"
+              />
+            </div>
+          )}
+          
+          {/* Popular Image Suggestions */}
+          <div className="mt-3">
+            <p className="text-sm text-gray-500 mb-2">Try these beautiful destinations:</p>
+            <div className="grid grid-cols-2 sm:grid-cols-3 gap-2">
+              {[
+                "https://images.unsplash.com/photo-1464822759023-fed622ff2c3b?q=80", // Mountains
+                "https://images.unsplash.com/photo-1507525428034-b723cf961d3e?q=80", // Beach
+                "https://images.unsplash.com/photo-1487730116645-74489c95b41b?q=80", // Forest
+              ].map((url, idx) => (
+                <button
+                  key={idx}
+                  type="button"
+                  onClick={() => setFormData(prev => ({ ...prev, image: url }))}
+                  className="rounded-md overflow-hidden h-16 border border-forest/20 hover:border-forest transition-colors"
+                >
+                  <img 
+                    src={url} 
+                    alt={`Suggestion ${idx + 1}`}
+                    className="w-full h-full object-cover"
+                  />
+                </button>
+              ))}
+            </div>
+          </div>
+        </div>
+        
         <div className="flex items-center justify-end mt-8 space-x-4">
           <button 
             type="button" 
